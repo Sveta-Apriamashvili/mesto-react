@@ -72,7 +72,7 @@ function App() {
                     <button type="button" className="pop-up__submit-button">Да</button>
                 </div></PopupWithForm>
             <ImagePopup />
-            <template className="element-template">
+            {/* <template className="element-template">
                 <li className="element">
                     <button className="element__bin" type="button" aria-label="удалить"></button>
                     <img className="element__image" src="#" alt="" />
@@ -81,7 +81,7 @@ function App() {
                         <button className="element__like" type="button" aria-label="нравится">0</button>
                     </div>
                 </li>
-            </template>
+            </template> */}
         </div>
 
     );
