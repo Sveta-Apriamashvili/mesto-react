@@ -1,10 +1,22 @@
-// import React from 'react';
+import React from 'react';
 
-// function Card (card) {
-//     return (
+function Card(props) {
 
-        
-//     )
-// }
+    function handleClick() {
+        props.onCardClick(props.card);
+    }
 
-// export default Card
+    return (
+
+        <li className="element">
+            <button className="element__bin" type="button" aria-label="удалить"></button>
+            <img className="element__image" src={props.card.link} alt="" onClick={handleClick} />
+            <div className="element__text-container">
+                <h3 className="element__title">{props.card.name}</h3>
+                <button className="element__like" type="button" aria-label="нравится">{props.card.likes.length}</button>
+            </div>
+        </li>
+    )
+}
+
+export default Card

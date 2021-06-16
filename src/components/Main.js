@@ -1,7 +1,7 @@
 import React from 'react';
 // import avatar from '../images/avatar.jpg';
 import { api } from '../utils/api';
-
+import Card from './Card'
 
 
 function Main(props) {
@@ -37,8 +37,6 @@ function Main(props) {
 
     )
 
-    // console.log('cards:',cards)
-
     return (
         <main className="content">
             <section className="profile">
@@ -57,16 +55,11 @@ function Main(props) {
                 <ul className="photo-grid__list">
                {
                cards.map((item) => {
-                   return (
-                    <li key={item._id} className="element">
-                    <button className="element__bin" type="button" aria-label="удалить"></button>
-                    <img className="element__image" src={item.link} alt="" />
-                    <div className="element__text-container">
-                        <h3 className="element__title">{item.name}</h3>
-                        <button className="element__like" type="button" aria-label="нравится">{item.likes.length}</button>
-                    </div>
-                </li>
-                   )
+                return (
+                    
+                    <Card key={item._id} card={item} onCardClick={props.onCardClick}/>
+                )
+                
                })
                }
                 </ul>
