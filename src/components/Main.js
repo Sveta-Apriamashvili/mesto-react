@@ -7,9 +7,9 @@ import Card from './Card'
 function Main(props) {
 
     const [isMouseOverAvatar, setIsMouseOverAvatar] = React.useState(false)
-    const [userName, setUserName] = React.useState()
-    const [userDescription, setUserDescription] = React.useState()
-    const [userAvatar, setUserAvatar] = React.useState()
+    const [userName, setUserName] = React.useState('')
+    const [userDescription, setUserDescription] = React.useState('')
+    const [userAvatar, setUserAvatar] = React.useState('')
     const [cards, setCards] = React.useState([])
 
 
@@ -27,12 +27,12 @@ function Main(props) {
                 setUserName(res.name)
                 setUserDescription(res.about)
                 setUserAvatar(res.avatar)
-            })
+            }).catch(console.log('error'))
 
         api.getInitialCards()
             .then(res => {
                 setCards(res)
-            })
+            }).catch(console.log('error'))
     }, []
 
     )
