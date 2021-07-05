@@ -3,7 +3,7 @@ class Api {
         this._baseUrl = options.baseUrl
         this._headers = options.headers
     }
-    
+
     // User
 
     getUserInfo() {
@@ -87,6 +87,14 @@ class Api {
                 return Promise.reject(`Ошибка: ${res.status}`);
             });
     }
+    changeLikeCardStatus(id, isLiked) {
+        if (isLiked) {
+            return this.deleteLike(id)
+        } else {
+            return this.addLike(id)
+        }
+    }
+
 
     addLike(id) {
         const url = `${this._baseUrl}/cards/likes/${id}`

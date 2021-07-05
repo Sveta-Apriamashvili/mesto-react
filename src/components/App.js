@@ -2,10 +2,13 @@ import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm'
+import PopupWithForm from './PopupWithForm';
+import { api } from '../utils/api';
 
 import '../index.css'
 import ImagePopup from './ImagePopup';
+
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
 function App() {
 
@@ -13,6 +16,7 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState();
+    const [currentUser, setCurrentUser] = React.useState('');
 
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(true);
@@ -38,8 +42,18 @@ function App() {
         setSelectedCard(card)
     }
 
+    React.useEffect(() => {
+        api.getUserInfo()
+            .then(res => {
+                setCurrentUser(res)
+                // setUserDescription(res.about)
+                // setUserAvatar(res.avatar)
+            }).catch(console.log('error'))
+        }, [])
+
     return (
         <div className="page__container">
+            <CurrentUserContext.Provider value={currentUser}>
             <Header />
             <Main
                 onEditAvatar={handleEditAvatarClick}
@@ -80,6 +94,7 @@ function App() {
                     <button type="button" className="pop-up__submit-button">Да</button>
                 </div></PopupWithForm>
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+            </CurrentUserContext.Provider>
         </div>
 
     );
