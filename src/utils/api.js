@@ -35,12 +35,13 @@ class Api {
 
     updateAvatar(link) {
         const url = `${this._baseUrl}/users/me/avatar`
+        console.log(link)
         return fetch(url, {
                 method: 'PATCH',
                 headers: this._headers,
 
                 body: JSON.stringify({
-                    avatar: link,
+                    avatar: link.avatar,
                 })
             })
             .then(this._getResponseData);

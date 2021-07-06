@@ -2,15 +2,12 @@ import React from 'react';
 // import avatar from '../images/avatar.jpg';
 import { api } from '../utils/api';
 import Card from './Card';
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
 function Main(props) {
 
     const [isMouseOverAvatar, setIsMouseOverAvatar] = React.useState(false)
-    // const [userName, setUserName] = React.useState('')
-    // const [userDescription, setUserDescription] = React.useState('')
-    // const [userAvatar, setUserAvatar] = React.useState('')
     const [cards, setCards] = React.useState([])
     const currentUser = React.useContext(CurrentUserContext);
 
@@ -24,23 +21,24 @@ function Main(props) {
     }
 
     function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some(i => i._id === currentUser._id);
-        
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+        api.changeLikeCardStatus(card._id, isLiked)
+        .then((newCard) => {
             setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
         });
     }
 
-    React.useEffect(() => {
-        // api.getUserInfo()
-        //     .then(res => {
-        //         setUserName(res.name)
-        //         setUserDescription(res.about)
-        //         setUserAvatar(res.avatar)
-        //     }).catch(console.log('error'))
+    function handleCardDelete(card) {
+        api.deleteCard(card._id)
+        .then((newCard) => setCards((cards) => cards.filter((c) => {
+            if (c._id !== card._id) return newCard
+        })))
+        .catch((error) => {
+            console.log(error)
+        })
+    }
 
+    React.useEffect(() => {
         api.getInitialCards()
             .then(res => {
                 setCards(res)
@@ -65,15 +63,15 @@ function Main(props) {
             </section>
             <section className="photo-grid">
                 <ul className="photo-grid__list">
-               {
-               cards.map((item) => {
-                return (
-                    
-                    <Card key={item._id} card={item} onCardClick={props.onCardClick} onCardLike={handleCardLike}/>
-                )
-                
-               })
-               }
+                    {
+                        cards.map((item) => {
+                            return (
+
+                                <Card key={item._id} card={item} onCardClick={props.onCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+                            )
+
+                        })
+                    }
                 </ul>
             </section>
         </main>
