@@ -5,6 +5,7 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 import { api } from '../utils/api';
 
 import '../index.css'
@@ -19,6 +20,8 @@ function App() {
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState();
     const [currentUser, setCurrentUser] = React.useState('');
+    const [cards, setCards] = React.useState([])
+
 
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(true);
@@ -55,10 +58,37 @@ function App() {
 
     function handleUpdateAvatar(link) {
         api.updateAvatar(link)
-        .then(res => {
-            setCurrentUser(res)
-        })
-        .then(closeAllPopups())
+            .then(res => {
+                setCurrentUser(res)
+            })
+            .then(closeAllPopups())
+            .catch(console.log('error'))
+    }
+
+    function handleCardLike(card) {
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        api.changeLikeCardStatus(card._id, isLiked)
+            .then((newCard) => {
+                setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+            });
+    }
+
+    function handleCardDelete(card) {
+        api.deleteCard(card._id)
+            .then((newCard) => setCards((cards) => cards.filter((c) => {
+                if (c._id !== card._id) return newCard
+            })))
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+    function handleAddPlaceSubmit(name, link) {
+        api.addNewCard(name, link)
+            .then(newCard => {
+                setCards([newCard, ...cards])
+            })
+            .then(closeAllPopups())
             .catch(console.log('error'))
     }
 
@@ -69,6 +99,15 @@ function App() {
             }).catch(console.log('error'))
     }, [])
 
+    React.useEffect(() => {
+        api.getInitialCards()
+            .then(res => {
+                setCards(res)
+            }).catch(console.log('error'))
+    }, []
+
+    )
+
     return (
         <div className="page__container">
             <CurrentUserContext.Provider value={currentUser}>
@@ -78,19 +117,14 @@ function App() {
                     onEditProfile={handleEditProfileClick}
                     onAddPlace={handleAddPlaceClick}
                     onCardClick={handleCardClick}
+                    cards={cards}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
                 />
                 <Footer />
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
                 <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-                <PopupWithForm title="Новое место" name="add-element" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
-                    <div className="pop-up__input-container">
-                        <input type="text" className="pop-up__item" id="cardname" name="name" placeholder="Название"
-                            minLength="2" maxLength="200" required />
-                        <span className="pop-up__error" id="cardname-error"></span>
-                        <input type="url" className="pop-up__item" id="image" name="about" placeholder="Ссылка на картинку"
-                            required />
-                        <span className="pop-up__error" id="image-error"></span>
-                    </div></PopupWithForm>
+                <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
                 <PopupWithForm title="Вы уверены?" name="remove-card">
                     <div className="pop-up__container">
                         <button className="pop-up__close-button" type="button" aria-label="закрыть"></button>
