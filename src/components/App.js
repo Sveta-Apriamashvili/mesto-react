@@ -6,7 +6,7 @@ import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import { api } from '../utils/api';
+import Api  from '../utils/api';
 
 import '../index.css'
 import ImagePopup from './ImagePopup';
@@ -48,7 +48,7 @@ function App() {
     }
 
     function handleUpdateUser(name, about) {
-        api.editUserInfo(name, about)
+        Api.editUserInfo(name, about)
             .then(res => {
                 setCurrentUser(res)
             })
@@ -57,7 +57,7 @@ function App() {
     }
 
     function handleUpdateAvatar(link) {
-        api.updateAvatar(link)
+        Api.updateAvatar(link)
             .then(res => {
                 setCurrentUser(res)
             })
@@ -67,14 +67,14 @@ function App() {
 
     function handleCardLike(card) {
         const isLiked = card.likes.some(i => i._id === currentUser._id);
-        api.changeLikeCardStatus(card._id, isLiked)
+        Api.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
                 setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
             });
     }
 
     function handleCardDelete(card) {
-        api.deleteCard(card._id)
+         Api.deleteCard(card._id)
             .then((newCard) => setCards((cards) => cards.filter((c) => {
                 if (c._id !== card._id) return newCard
             })))
@@ -84,7 +84,7 @@ function App() {
     }
 
     function handleAddPlaceSubmit(name, link) {
-        api.addNewCard(name, link)
+         Api.addNewCard(name, link)
             .then(newCard => {
                 setCards([newCard, ...cards])
             })
@@ -93,14 +93,14 @@ function App() {
     }
 
     React.useEffect(() => {
-        api.getUserInfo()
+          Api.getUserInfo()
             .then(res => {
                 setCurrentUser(res)
             }).catch(console.log('error'))
     }, [])
 
     React.useEffect(() => {
-        api.getInitialCards()
+         Api.getInitialCards()
             .then(res => {
                 setCards(res)
             }).catch(console.log('error'))
