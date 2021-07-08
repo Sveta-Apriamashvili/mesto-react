@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
+// import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
@@ -19,7 +19,7 @@ function App() {
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState();
-    const [currentUser, setCurrentUser] = React.useState('');
+    const [currentUser, setCurrentUser] = React.useState({});
     const [cards, setCards] = React.useState([])
 
 
@@ -52,7 +52,7 @@ function App() {
             .then(res => {
                 setCurrentUser(res)
             })
-            .then(closeAllPopups())
+            .then(closeAllPopups)
             .catch(console.log('error'))
     }
 
@@ -61,7 +61,7 @@ function App() {
             .then(res => {
                 setCurrentUser(res)
             })
-            .then(closeAllPopups())
+            .then(closeAllPopups)
             .catch(console.log('error'))
     }
 
@@ -70,7 +70,8 @@ function App() {
         Api.changeLikeCardStatus(card._id, isLiked)
             .then((newCard) => {
                 setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-            });
+            })
+            .catch(console.log('error'));
     }
 
     function handleCardDelete(card) {
@@ -125,12 +126,12 @@ function App() {
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
                 <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
                 <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
-                <PopupWithForm title="Вы уверены?" name="remove-card">
+                {/* <PopupWithForm title="Вы уверены?" name="remove-card">
                     <div className="pop-up__container">
                         <button className="pop-up__close-button" type="button" aria-label="закрыть"></button>
                         <h3 className=" pop-up__title">Вы уверены?</h3>
                         <button type="button" className="pop-up__submit-button">Да</button>
-                    </div></PopupWithForm>
+                    </div></PopupWithForm> */}
                 <ImagePopup card={selectedCard} onClose={closeAllPopups} />
             </CurrentUserContext.Provider>
         </div>
