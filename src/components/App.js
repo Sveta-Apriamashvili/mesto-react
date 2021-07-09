@@ -6,7 +6,7 @@ import Footer from './Footer';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-import Api  from '../utils/api';
+import Api from '../utils/api';
 
 import '../index.css'
 import ImagePopup from './ImagePopup';
@@ -43,7 +43,6 @@ function App() {
     }
 
     function handleCardClick(card) {
-        console.log('click')
         setSelectedCard(card)
     }
 
@@ -53,7 +52,7 @@ function App() {
                 setCurrentUser(res)
             })
             .then(closeAllPopups)
-            .catch(console.log('error'))
+            .catch(() => console.log('error'))       
     }
 
     function handleUpdateAvatar(link) {
@@ -62,7 +61,7 @@ function App() {
                 setCurrentUser(res)
             })
             .then(closeAllPopups)
-            .catch(console.log('error'))
+            .catch(() => console.log('error'))
     }
 
     function handleCardLike(card) {
@@ -71,40 +70,40 @@ function App() {
             .then((newCard) => {
                 setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
             })
-            .catch(console.log('error'));
+            .catch(() => console.log('error'))         
     }
 
     function handleCardDelete(card) {
-         Api.deleteCard(card._id)
+        Api.deleteCard(card._id)
             .then((newCard) => setCards((cards) => cards.filter((c) => {
                 if (c._id !== card._id) return newCard
             })))
-            .catch((error) => {
-                console.log(error)
-            })
+            .catch(() => console.log('error'))         
     }
 
     function handleAddPlaceSubmit(name, link) {
-         Api.addNewCard(name, link)
+        Api.addNewCard(name, link)
             .then(newCard => {
                 setCards([newCard, ...cards])
             })
-            .then(closeAllPopups())
-            .catch(console.log('error'))
+            .then(closeAllPopups)
+            .catch(() => console.log('error'))
     }
 
     React.useEffect(() => {
-          Api.getUserInfo()
+        Api.getUserInfo()
             .then(res => {
                 setCurrentUser(res)
-            }).catch(console.log('error'))
+            })
+            .catch(() => console.log('error'))
     }, [])
 
     React.useEffect(() => {
-         Api.getInitialCards()
+        Api.getInitialCards()
             .then(res => {
                 setCards(res)
-            }).catch(console.log('error'))
+            })
+            .catch(() => console.log('error'))
     }, []
 
     )
