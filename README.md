@@ -9,19 +9,31 @@
 ## Инструкция по развертыванию:
 
 ### В терминале
+
+- Шаг 0:
+
+Если у вас не установлен npm
+```bash
+brew install npm
+```
+
 - Шаг 1:
+```bash
 git clone https://github.com/Sveta-Apriamashvili/mesto-react.git
+```
 
 - Шаг 2:
-cd [your local repository]
+```bash
+cd mesto-react
+```
 
 - Шаг 3: 
-/* Delete the node_modules folder and any 'lock' files such as 
-yarn.lock or package-lock.json if present.*/
-
-- Шаг 5: 
+```bash
 npm install
+```
 
-- Шаг 6:
+- Шаг 4:
+```bash
 npm start
+```
 
